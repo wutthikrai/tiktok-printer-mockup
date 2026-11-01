@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>TikTok Printer Mockup</title>
+    <style>
+        body { 
+            background: #111; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: sans-serif; 
+            color: #fff;
+        }
+        canvas { 
+            background: #fdfbf7; 
+            border: 4px solid #333; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        }
+        .btn-container {
+            margin-top: 20px;
+        }
+        button { 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            background: #fe2c55; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(254,44,85,0.4);
+        }
+        button:hover { 
+            background: #e02447; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- หน้าจอกระดาษจำลอง -->
+    <canvas id="printerCanvas" width="400" height="600"></canvas>
+    
+    <!-- ปุ่มจำลองการส่งของขวัญ -->
+    <div class="btn-container">
+        <button onclick="simulateGift()">🎁 จำลองคนส่งกุหลาบ</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('printerCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let paperY = 60; // ตำแหน่งเริ่มต้นบนกระดาษ
+
+        function drawBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // วาดแผ่นกระดาษ
+            ctx.fillStyle = '#f4ecd8';
+            ctx.fillRect(40, 0, 320, canvas.height);
+            
+            // วาดหัวเครื่องพิมพ์ด้านบน
+            ctx.fillStyle = '#555';
+            ctx.fillRect(30, 20, 340, 25);
+            ctx.fillStyle = '#222';
+            ctx.fillRect(180, 25, 40, 15);
+        }
+
+        // วาดหน้าจอเริ่มต้น
+        drawBackground();
+
+        // ฟังก์ชันจำลองเมื่อมีคนส่งกุหลาบ
+        function simulateGift() {
+            const names = ["สมชาย ใจดี", "Amarin_Channel", "Natasha_99", "Krit_Live"];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            
+            let headX = 50;
+
+            function animatePrinting() {
+                drawBackground();
+
+                // แสดงข้อความชื่อผู้ส่งจำลองบนกระดาษ
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText(`🌹 ผู้ส่ง: ${randomName}`, 60, paperY);
+                ctx.font = '14px sans-serif';
+                ctx.fillText(`ส่งกุหลาบ: 1 ดวง`, 60, paperY + 25);
+
+                // หัวพิมพ์ขยับไปมาจำลองการทำงาน
+                ctx.fillStyle = '#ff3366';
+                ctx.fillRect(headX, 30, 15, 10);
+
+                headX += 8;
+                if (headX < 340) {
+                    requestAnimationFrame(animatePrinting);
+                } else {
+                    // เลื่อนตำแหน่งกระดาษลงด้านล่างสำหรับรายการถัดไป
+                    paperY += 80;
+                    if (paperY > canvas.height - 60) {
+                        paperY = 60; // รีเซ็ตตำแหน่งถ้ายาวเกินหน้ากระดาษ
+                    }
+                }
+            }
+            animatePrinting();
+        }
+    </script>
+</body>
+</html>
